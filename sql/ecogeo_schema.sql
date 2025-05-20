@@ -113,3 +113,11 @@ CREATE TABLE empleado_almacen (
     CONSTRAINT fk_empleado_almacen_almacen FOREIGN KEY (id_almacen)
         REFERENCES almacen (id_almacen)
 );
+
+CREATE TABLE cliente (
+    id SERIAL PRIMARY KEY,
+    nombre VARCHAR(100) NOT NULL,
+    email VARCHAR(100) NOT NULL UNIQUE,
+    password TEXT NOT NULL
+);
+

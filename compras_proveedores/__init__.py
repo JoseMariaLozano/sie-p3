@@ -4,7 +4,7 @@ from flask import Blueprint
 
 compras_bp = Blueprint('compras', __name__)
 
-@compras_bp.route('/')
-def index():
+@compras_bp.route('/compras')
+def compras():
     return "Página de compras"
 
