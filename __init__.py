@@ -32,3 +32,10 @@ def create_app(test_config=None):
     app.register_blueprint(ventas_bp)
     app.register_blueprint(inventario_bp)
     app.register_blueprint(db_bp)
+
+    def index():
+        return render_template('index.html')
+    
+    app.add_url_rule("/", "index", index)
+
+    return app
