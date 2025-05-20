@@ -9,6 +9,11 @@ DROP TABLE IF EXISTS horario_trabajo CASCADE;
 DROP TABLE IF EXISTS contrato CASCADE;
 DROP TABLE IF EXISTS almacen CASCADE;
 DROP TABLE IF EXISTS empleado CASCADE;
+DROP TABLE IF EXISTS factura_insumo CASCADE;
+DROP TABLE IF EXISTS orden_compra CASCADE;
+DROP TABLE IF EXISTS factura CASCADE;
+DROP TABLE IF EXISTS insumo CASCADE;
+DROP TABLE IF EXISTS proveedor CASCADE;
 
 -- Tabla Empleado
 CREATE TABLE empleado (
@@ -113,4 +118,60 @@ CREATE TABLE empleado_almacen (
         REFERENCES empleado (dni),
     CONSTRAINT fk_empleado_almacen_almacen FOREIGN KEY (id_almacen)
         REFERENCES almacen (id_almacen)
+);
+
+-- Tabla Proveedor
+CREATE TABLE Proveedor (
+    ID_Proveedor SERIAL PRIMARY KEY,
+    Nombre VARCHAR(100) NOT NULL,
+    Direccion VARCHAR(200) NOT NULL,
+    Telefono VARCHAR(20) NOT NULL,
+    Correo_electronico VARCHAR(100) NOT NULL,
+    Estado VARCHAR(50) NOT NULL
+);
+
+-- Tabla Insumo
+CREATE TABLE Insumo (
+    GTIN_Insumo VARCHAR(20) PRIMARY KEY,
+    Nombre VARCHAR(100) NOT NULL,
+    Medidas VARCHAR(50),
+    Stock_actual INTEGER NOT NULL,
+    Precio_estimado NUMERIC(10, 2) NOT NULL
+);
+
+-- Tabla Factura
+CREATE TABLE Factura (
+    ID_Factura SERIAL PRIMARY KEY,
+    ID_Proveedor INTEGER NOT NULL,
+    Fecha_Emision DATE DEFAULT CURRENT_DATE,
+    Coste NUMERIC(10, 2) NOT NULL,
+    Insumo_Solicitado TEXT,
+    Fecha_Pago DATE,
+    Estado VARCHAR(50) NOT NULL,
+    FOREIGN KEY (ID_Proveedor) REFERENCES Proveedor(ID_Proveedor)
+);
+
+-- Tabla Orden de Compra
+CREATE TABLE Orden_Compra (
+    ID_Compra SERIAL PRIMARY KEY,
+    ID_Proveedor INTEGER NOT NULL,
+    ID_Factura INTEGER,
+    Fecha_Emision DATE DEFAULT CURRENT_DATE,
+    Estado VARCHAR(50) NOT NULL,
+    Fecha_Entrega DATE,
+    Informacion_Material TEXT,
+    Observaciones TEXT,
+    FOREIGN KEY (ID_Proveedor) REFERENCES Proveedor(ID_Proveedor),
+    FOREIGN KEY (ID_Factura) REFERENCES Factura(ID_Factura)
+);
+
+-- Tabla intermedia: Factura_Insumo
+CREATE TABLE Factura_Insumo (
+    ID_Factura INTEGER NOT NULL,
+    GTIN_Insumo VARCHAR(20) NOT NULL,
+    Cantidad INTEGER DEFAULT 1,
+    Precio_Unitario NUMERIC(10, 2),
+    PRIMARY KEY (ID_Factura, GTIN_Insumo),
+    FOREIGN KEY (ID_Factura) REFERENCES Factura(ID_Factura) ON DELETE CASCADE,
+    FOREIGN KEY (GTIN_Insumo) REFERENCES Insumo(GTIN_Insumo) ON DELETE CASCADE
 );
