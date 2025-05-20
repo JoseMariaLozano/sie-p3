@@ -25,6 +25,7 @@ CREATE TABLE empleado (
 CREATE TABLE almacen (
     id_almacen SERIAL PRIMARY KEY,
     nombre VARCHAR(100) NOT NULL,
+    capacidad_material INTEGER,
     direccion VARCHAR(200),
     capacidad_empleados INTEGER
 );
