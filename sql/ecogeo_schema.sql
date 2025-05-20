@@ -120,6 +120,14 @@ CREATE TABLE empleado_almacen (
         REFERENCES almacen (id_almacen)
 );
 
+CREATE TABLE cliente (
+    id SERIAL PRIMARY KEY,
+    nombre VARCHAR(100) NOT NULL,
+    email VARCHAR(100) NOT NULL UNIQUE,
+    password TEXT NOT NULL
+);
+
+
 -- Tabla Proveedor
 CREATE TABLE Proveedor (
     ID_Proveedor SERIAL PRIMARY KEY,

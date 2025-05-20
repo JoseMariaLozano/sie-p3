@@ -4,8 +4,7 @@ import psycopg2.extras as extras
 from flask import Blueprint
 import click
 from flask import current_app
-from flask import g 
-
+from flask import g
 from flask import url_for, redirect
 
 db_bp = Blueprint("db", __name__, url_prefix="/db")
@@ -17,7 +16,7 @@ def get_db():
     """
     if "db" not in g:
         g.db = pg.connect(
-            database='ecogeo',
+            database='ecogeo',   # Asegúrate de que los valores sean correctos
             user='jose',
             password='ecogeo',
             host='localhost',
@@ -38,9 +37,9 @@ def close_db(e=None):
 
     if db is not None:
         db.close()
-"""
-# Fuera de servicio por ahora
+
 def init_db():
+    """Inicializa la base de datos ejecutando scripts SQL."""
     cur = get_db_cursor()
     
     # Lista de archivos SQL a ejecutar
@@ -57,20 +56,21 @@ def init_db():
         with current_app.open_resource(f"./sql/{sql_file}") as f:
             cur.execute(f.read().decode("utf8"))
             cur.execute("COMMIT;")
-"""
-
 
 @click.command('init-db')
 def init_db_command():
     """Clear the existing data and create new tables"""
     init_db()
-    click.echo("Inicializada la base de datos")
+    click.echo("Base de datos inicializada correctamente.")
 
 @db_bp.route("/init_db_from_app", methods=("GET", "POST"))
 def init_db_from_app():
+    """Ruta para inicializar la base de datos desde la app"""
     init_db()
     return redirect(url_for("index"))
 
 def init_app(app):
+    """Registrar las funciones necesarias para la base de datos"""
     app.teardown_appcontext(close_db)
     app.cli.add_command(init_db_command)
+
