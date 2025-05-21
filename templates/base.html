@@ -4,6 +4,14 @@
     <meta charset="UTF-8">
     <title>{% block title %}{% endblock %} - ECOGEO</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+    <style>
+        /* Redimensionamos la imagen dentro del header */
+        header img {
+            width: 100px; /* Ajustamos el ancho a 100px */
+            height: auto; /* Mantenemos la proporción original */
+        }
+    </style>
 </head>
 <body>
 
@@ -25,3 +33,4 @@
 
 </body>
 </html>
+
