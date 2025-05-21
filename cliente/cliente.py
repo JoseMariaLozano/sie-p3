@@ -6,55 +6,34 @@ cliente_bp = Blueprint('cliente', __name__, url_prefix='/cliente')
 
 
 @cliente_bp.route('/register', methods=['GET', 'POST'])
-<<<<<<< HEAD
 def registro():
     if request.method == 'POST':
         nombre = request.form.get('nombre')
         email = request.form.get('email')
         password = request.form.get('password')
 
-        db = get_db()
-=======
-def register():
-    if request.method == 'POST':
-        nombre = request.form['nombre']
-        email = request.form['email']
-        password = request.form['password']
-        db = get_db_cursor()
->>>>>>> ce336c6edcb8e4432e7c1317758d9c64e52ae808
+        cursor, conn = get_db_cursor()
         error = None
 
         if not nombre or not email or not password:
             error = 'Todos los campos son obligatorios.'
-<<<<<<< HEAD
-        elif db.execute('SELECT id FROM cliente WHERE email = ?', (email,)).fetchone():
-            error = 'Ya existe un cliente con ese email.'
+        else:
+            cursor.execute('SELECT id FROM cliente WHERE email = %s', (email,))
+            if cursor.fetchone():
+                error = 'Ya existe un cliente con ese email.'
 
         if error is None:
             try:
-                db.execute(
-                    'INSERT INTO cliente (nombre, email, password) VALUES (?, ?, ?)',
+                cursor.execute(
+                    'INSERT INTO cliente (nombre, email, password) VALUES (%s, %s, %s)',
                     (nombre, email, generate_password_hash(password))
                 )
-                db.commit()
+                conn.commit()
                 flash('¡Registro exitoso! Ahora puedes iniciar sesión.')
                 return redirect(url_for('cliente.login'))
             except Exception as e:
-                db.rollback()
+                conn.rollback()
                 error = f'Error al registrar cliente: {str(e)}'
-=======
-        elif db.execute('SELECT id FROM cliente WHERE email = %s', (email,)).fetchone():
-            error = 'Ya existe un cliente con ese email.'
-
-        if error is None:
-            db.execute(
-                'INSERT INTO cliente (nombre, email, password) VALUES (%s, %s, %s)',
-                (nombre, email, generate_password_hash(password))
-            )
-            db.commit()
-            flash('¡Registro exitoso!')
-            return redirect(url_for('cliente.login'))
->>>>>>> ce336c6edcb8e4432e7c1317758d9c64e52ae808
 
         flash(error)
 
@@ -64,36 +43,28 @@ def register():
 @cliente_bp.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
-<<<<<<< HEAD
         email = request.form.get('email')
         password = request.form.get('password')
-
-        db = get_db()
-=======
-        email = request.form['email']
-        password = request.form['password']
-        db = get_db_cursor()
->>>>>>> ce336c6edcb8e4432e7c1317758d9c64e52ae808
         error = None
 
-        cliente = db.execute(
-<<<<<<< HEAD
-            'SELECT * FROM cliente WHERE email = ?', (email,)
-=======
-            'SELECT * FROM cliente WHERE email = %s', (email,)
->>>>>>> ce336c6edcb8e4432e7c1317758d9c64e52ae808
-        ).fetchone()
+        cursor, _ = get_db_cursor()
 
-        if cliente is None:
-            error = 'Usuario no encontrado.'
-        elif not check_password_hash(cliente['password'], password):
-            error = 'Contraseña incorrecta.'
+        try:
+            cursor.execute('SELECT * FROM cliente WHERE email = %s', (email,))
+            cliente = cursor.fetchone()
 
-        if error is None:
-            session.clear()
-            session['cliente_id'] = cliente['id']
-            session['cliente_nombre'] = cliente['nombre']
-            return redirect(url_for('index'))
+            if cliente is None:
+                error = 'Usuario no encontrado.'
+            elif not check_password_hash(cliente['password'], password):
+                error = 'Contraseña incorrecta.'
+            else:
+                session.clear()
+                session['cliente_id'] = cliente['id']
+                session['cliente_nombre'] = cliente['nombre']
+                return redirect(url_for('index'))
+
+        except Exception as e:
+            error = f'Ocurrió un error al iniciar sesión: {str(e)}'
 
         flash(error)
 
@@ -104,4 +75,3 @@ def login():
 def logout():
     session.clear()
     return redirect(url_for('index'))
-
