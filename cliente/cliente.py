@@ -6,6 +6,7 @@ cliente_bp = Blueprint('cliente', __name__, url_prefix='/cliente')
 
 
 @cliente_bp.route('/register', methods=['GET', 'POST'])
+
 def registro():
     if request.method == 'POST':
         nombre = request.form.get('nombre')
@@ -17,6 +18,7 @@ def registro():
 
         if not nombre or not email or not password:
             error = 'Todos los campos son obligatorios.'
+
         else:
             cursor.execute('SELECT id FROM cliente WHERE email = %s', (email,))
             if cursor.fetchone():
@@ -35,6 +37,19 @@ def registro():
                 conn.rollback()
                 error = f'Error al registrar cliente: {str(e)}'
 
+        elif db.execute('SELECT id FROM cliente WHERE email = %s', (email,)).fetchone():
+            error = 'Ya existe un cliente con ese email.'
+
+        if error is None:
+            db.execute(
+                'INSERT INTO cliente (nombre, email, password) VALUES (%s, %s, %s)',
+                (nombre, email, generate_password_hash(password))
+            )
+            db.commit()
+            flash('¡Registro exitoso!')
+            return redirect(url_for('cliente.login'))
+
+
         flash(error)
 
     return render_template('cliente/registro.html')
@@ -43,11 +58,14 @@ def registro():
 @cliente_bp.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
-        email = request.form.get('email')
-        password = request.form.get('password')
+        email = request.form['email']
+        password = request.form['password']
+        db = get_db_cursor()
         error = None
 
-        cursor, _ = get_db_cursor()
+        cliente = db.execute(
+            'SELECT * FROM cliente WHERE email = %s', (email,)
+        ).fetchone()
 
         try:
             cursor.execute('SELECT * FROM cliente WHERE email = %s', (email,))
