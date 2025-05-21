@@ -1,5 +1,3 @@
-# cliente.py
-
 from flask import Blueprint, render_template, request, redirect, url_for, flash, session
 from werkzeug.security import generate_password_hash, check_password_hash
 from ..sql.db import get_db
@@ -7,28 +5,33 @@ from ..sql.db import get_db
 cliente_bp = Blueprint('cliente', __name__, url_prefix='/cliente')
 
 
-@cliente_bp.route('/registro', methods=['GET', 'POST'])
+@cliente_bp.route('/register', methods=['GET', 'POST'])
 def registro():
     if request.method == 'POST':
-        nombre = request.form['nombre']
-        email = request.form['email']
-        password = request.form['password']
+        nombre = request.form.get('nombre')
+        email = request.form.get('email')
+        password = request.form.get('password')
+
         db = get_db()
         error = None
 
         if not nombre or not email or not password:
             error = 'Todos los campos son obligatorios.'
-        elif db.execute('SELECT id FROM clientes WHERE email = ?', (email,)).fetchone():
+        elif db.execute('SELECT id FROM cliente WHERE email = ?', (email,)).fetchone():
             error = 'Ya existe un cliente con ese email.'
 
         if error is None:
-            db.execute(
-                'INSERT INTO clientes (nombre, email, password) VALUES (?, ?, ?)',
-                (nombre, email, generate_password_hash(password))
-            )
-            db.commit()
-            flash('¡Registro exitoso!')
-            return redirect(url_for('cliente.login'))
+            try:
+                db.execute(
+                    'INSERT INTO cliente (nombre, email, password) VALUES (?, ?, ?)',
+                    (nombre, email, generate_password_hash(password))
+                )
+                db.commit()
+                flash('¡Registro exitoso! Ahora puedes iniciar sesión.')
+                return redirect(url_for('cliente.login'))
+            except Exception as e:
+                db.rollback()
+                error = f'Error al registrar cliente: {str(e)}'
 
         flash(error)
 
@@ -38,12 +41,14 @@ def registro():
 @cliente_bp.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
-        email = request.form['email']
-        password = request.form['password']
+        email = request.form.get('email')
+        password = request.form.get('password')
+
         db = get_db()
         error = None
+
         cliente = db.execute(
-            'SELECT * FROM clientes WHERE email = ?', (email,)
+            'SELECT * FROM cliente WHERE email = ?', (email,)
         ).fetchone()
 
         if cliente is None:
