@@ -8,8 +8,8 @@
         <a href="{{ url_for('inventario.mostrar_categoria', categoria='almacenaje') }}">Cajas para Almacenaje</a>  
     </nav>        
     <div class="nav-right">
-        <a href="/login">Login</a>
-        <a href="/register">Registro</a>
+        <a href="{{ url_for('cliente.login') }}">Login</a>
+        <a href="{{ url_for('cliente.register') }}">Registro</a>
     </div>
 </nav>
 

@@ -2,7 +2,7 @@
 
 from flask import Blueprint, render_template, request, redirect, url_for, flash, session
 from werkzeug.security import generate_password_hash, check_password_hash
-from ..sql.db import get_db
+from ..sql.db import get_db_cursor
 
 cliente_bp = Blueprint('cliente', __name__, url_prefix='/cliente')
 
@@ -13,17 +13,17 @@ def register():
         nombre = request.form['nombre']
         email = request.form['email']
         password = request.form['password']
-        db = get_db()
+        db = get_db_cursor()
         error = None
 
         if not nombre or not email or not password:
             error = 'Todos los campos son obligatorios.'
-        elif db.execute('SELECT id FROM clientes WHERE email = ?', (email,)).fetchone():
+        elif db.execute('SELECT id FROM cliente WHERE email = %s', (email,)).fetchone():
             error = 'Ya existe un cliente con ese email.'
 
         if error is None:
             db.execute(
-                'INSERT INTO clientes (nombre, email, password) VALUES (?, ?, ?)',
+                'INSERT INTO cliente (nombre, email, password) VALUES (%s, %s, %s)',
                 (nombre, email, generate_password_hash(password))
             )
             db.commit()
@@ -40,10 +40,10 @@ def login():
     if request.method == 'POST':
         email = request.form['email']
         password = request.form['password']
-        db = get_db()
+        db = get_db_cursor()
         error = None
         cliente = db.execute(
-            'SELECT * FROM clientes WHERE email = ?', (email,)
+            'SELECT * FROM cliente WHERE email = %s', (email,)
         ).fetchone()
 
         if cliente is None:
