@@ -14,6 +14,17 @@ DROP TABLE IF EXISTS orden_compra CASCADE;
 DROP TABLE IF EXISTS factura CASCADE;
 DROP TABLE IF EXISTS insumo CASCADE;
 DROP TABLE IF EXISTS proveedor CASCADE;
+DROP TABLE IF EXISTS producto CASCADE;
+
+CREATE TABLE producto (
+    id_producto SERIAL PRIMARY KEY,
+    cantidad INTEGER NOT NULL CHECK (cantidad >= 0),
+    alerta INTEGER NOT NULL CHECK (alerta >= 0),
+    id_almacen INTEGER NOT NULL,
+    precio NUMERIC(10,2) NOT NULL CHECK (precio >= 0),
+    descripcion TEXT,
+    tipo SMALLINT NOT NULL CHECK (tipo IN (1, 2, 3))
+);
 
 -- Tabla Empleado
 CREATE TABLE empleado (

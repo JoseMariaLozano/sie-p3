@@ -1,0 +1,192 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #ffffff;
+}
+
+header {
+    text-align: center;
+    padding: 2em 0 1em;
+}
+
+header img {
+    max-width: 200px;
+    height: auto;
+}
+
+nav {
+    background-color: #4B3621;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1em 2em;
+}
+
+.nav-left, .nav-right {
+    display: flex;
+    align-items: center;
+    gap: 1.5em;
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s ease;
+}
+
+nav a:hover {
+    color: #90EE90;
+}
+
+.category {
+    margin: 3em 2em;
+}
+
+.category h2 {
+    border-bottom: 3px solid #4B3621;
+    padding-bottom: 0.5em;
+    color: #4B3621;
+}
+
+.product-grid {
+    display: flex;
+    gap: 2em;
+    margin-top: 1em;
+    flex-wrap: wrap;
+}
+
+.product-card {
+    border: 1px solid #ccc;
+    padding: 1em;
+    width: calc(33% - 2em);
+    box-sizing: border-box;
+    text-align: center;
+    background-color: #f9f9f9;
+    transition: box-shadow 0.3s;
+}
+
+.product-card:hover {
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+.product-card img {
+    width: 100%;
+    height: 200px;
+    background-color: #eee;
+    object-fit: cover;
+    border-radius: 4px;
+}
+
+.price {
+    margin: 1em 0;
+    font-size: 1.2em;
+    color: green;
+}
+
+.size-buttons button {
+    margin: 0.2em;
+    padding: 0.4em 0.8em;
+    border: none;
+    background-color: #228B22;
+    color: white;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.size-buttons button:hover {
+    background-color: #1e7a1e;
+}
+
+footer {
+    background-color: #000;
+    color: #fff;
+    padding: 2em;
+    text-align: center;
+    margin-top: 4em;
+}
+
+a.image-link {
+    display: inline-block;
+    text-decoration: none;
+    color: inherit;
+}
+
+@media screen and (max-width: 768px) {
+    .product-card {
+        width: 100%;
+    }
+
+    nav {
+        flex-direction: column;
+        gap: 1em;
+    }
+}
+
+/* Estilo base del contenedor  (formularios) */
+.form-container {
+    max-width: 400px;
+    margin: 40px auto;
+    padding: 30px;
+    background-color: #fff;
+    border: 2px solid #4a3f35; /* marrón oscuro */
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    font-family: Arial, sans-serif;
+  }
+  
+  /* Título del formulario */
+  .form-title {
+    text-align: center;
+    color: #2e7d32; /* verde oscuro */
+    margin-bottom: 20px;
+  }
+  
+  /* Estilo general de formularios */
+  .custom-form label {
+    display: block;
+    margin-bottom: 5px;
+    color: #4a3f35; /* marrón */
+    font-weight: bold;
+  }
+  
+  .custom-form input[type="text"],
+  .custom-form input[type="email"],
+  .custom-form input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #fdfdfd;
+    box-sizing: border-box;
+  }
+  
+  .custom-form input[type="text"]:focus,
+  .custom-form input[type="email"]:focus,
+  .custom-form input[type="password"]:focus {
+    border-color: #2e7d32; /* verde oscuro */
+    outline: none;
+  }
+  
+  /* Botón */
+  .submit-btn {
+    width: 100%;
+    padding: 10px;
+    background-color: #2e7d32; /* verde */
+    color: #ffffff;
+    border: none;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .submit-btn:hover {
+    background-color: #1b5e20; /* verde más oscuro */
+  }
+
+  
+/* fin estilo de los formularios */

@@ -1,73 +1,77 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>EcoGeo - Cajas de Cartón</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-</head>
-<body>
+{% extends "base.html" %}
+{% block title %}EcoGeo - Cajas de Cartón{% endblock %}
 
-    <!-- LOGO -->
-    <header class="header">
-        <img src="https://via.placeholder.com/200x100?text=EcoGeo+Logo" alt="Logo EcoGeo">
-    </header>
+{% block content %}
+<header>
+    <img src="https://via.placeholder.com/200x100?text=EcoGeo+Logo" alt="Logo EcoGeo">
+</header>
 
-    <!-- NAVBAR -->
-    <nav class="navbar">
-        <div class="nav-left">
-            <a href="#mudanza">MUDANZA</a>
-            <a href="#almacenaje">ALMACENAJE</a>
-            <a href="#contapa">CON TAPA</a>
-        </div>
-        <div class="nav-right">
-            <a href="/login">Login</a>
-            <a href="/auth">Auth</a>
-        </div>
-    </nav>
+<nav>
+    <div class="nav-left">
+        <a href="#mudanza">MUDANZA</a>
+        <a href="#almacenaje">ALMACENAJE</a>
+        <a href="#contapa">CON TAPA</a>
+    </div>
+    <div class="nav-right">
+        <a href="/login">Login</a>
+        <a href="/register">Registro</a>
+    </div>
+</nav>
 
-    <!-- PRODUCTOS -->
-    <main>
-        <section class="category" id="mudanza">
-            <h2>MUDANZA</h2>
-            <div class="product-grid">
-                <!-- Producto 1 -->
-                <div class="product-card">
-                    <a href="#"><img src="https://via.placeholder.com/300x200" alt="Producto Mudanza 1"></a>
-                    <h3>Caja Mudanza 1</h3>
-                    <p class="price">12,00 €</p>
-                    <div class="size-buttons">
-                        <button>Small</button><button>Medium</button><button>Big</button>
-                    </div>
-                </div>
-                <!-- Producto 2 -->
-                <div class="product-card">
-                    <a href="#"><img src="https://via.placeholder.com/300x200" alt="Producto Mudanza 2"></a>
-                    <h3>Caja Mudanza 2</h3>
-                    <p class="price">15,00 €</p>
-                    <div class="size-buttons">
-                        <button>Small</button><button>Medium</button><button>Big</button>
-                    </div>
-                </div>
-                <!-- Producto 3 -->
-                <div class="product-card">
-                    <a href="#"><img src="https://via.placeholder.com/300x200" alt="Producto Mudanza 3"></a>
-                    <h3>Caja Mudanza 3</h3>
-                    <p class="price">18,00 €</p>
-                    <div class="size-buttons">
-                        <button>Small</button><button>Medium</button><button>Big</button>
-                    </div>
-                </div>
+<div class="category" id="mudanza">
+    <h2>Cajas para Mudanza</h2>
+    <div class="product-grid">
+        {% for i in range(3) %}
+        <div class="product-card">
+            <a href="#" class="image-link">
+                <img src="https://via.placeholder.com/300x200" alt="Producto Mudanza {{ i+1 }}">
+            </a>
+            <div class="price">{{ 12 + i*3 }},00 €</div>
+            <div class="size-buttons">
+                <button>Pequeña</button>
+                <button>Mediana</button>
+                <button>Grande</button>
             </div>
-        </section>
+        </div>
+        {% endfor %}
+    </div>
+</div>
 
-        <!-- Almacenaje y Con Tapa: repite estructura -->
-        <!-- ... similar al anterior, omito para brevedad ... -->
-    </main>
+<div class="category" id="almacenaje">
+    <h2>Cajas para Almacenaje</h2>
+    <div class="product-grid">
+        {% for i in range(3) %}
+        <div class="product-card">
+            <a href="#" class="image-link">
+                <img src="https://via.placeholder.com/300x200" alt="Producto Almacenaje {{ i+1 }}">
+            </a>
+            <div class="price">{{ 10 + i*3 }},00 €</div>
+            <div class="size-buttons">
+                <button>Pequeña</button>
+                <button>Mediana</button>
+                <button>Grande</button>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
 
-    <!-- FOOTER -->
-    <footer class="footer">
-        <p>EcoGeo S.L. | contacto@ecogeo.es | Tel: 912 345 678 | C/ Reciclaje Verde, 12, Madrid</p>
-    </footer>
-
-</body>
-</html>
+<div class="category" id="contapa">
+    <h2>Cajas con Tapa</h2>
+    <div class="product-grid">
+        {% for i in range(3) %}
+        <div class="product-card">
+            <a href="#" class="image-link">
+                <img src="https://via.placeholder.com/300x200" alt="Producto Con Tapa {{ i+1 }}">
+            </a>
+            <div class="price">{{ 14 + i*5 }},00 €</div>
+            <div class="size-buttons">
+                <button>Pequeña</button>
+                <button>Mediana</button>
+                <button>Grande</button>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

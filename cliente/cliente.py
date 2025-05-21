@@ -2,7 +2,7 @@
 
 from flask import Blueprint, render_template, request, redirect, url_for, flash, session
 from werkzeug.security import generate_password_hash, check_password_hash
-from sql.db import get_db
+from ..sql.db import get_db
 
 cliente_bp = Blueprint('cliente', __name__, url_prefix='/cliente')
 

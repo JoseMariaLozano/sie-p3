@@ -31,18 +31,25 @@ def create_app(test_config=None):
     from .compras_proveedores.compras import compras_bp
     from .ventas_comercial.ventas import ventas_bp
     from .inventario_almacenes.inventario import inventario_bp
-    from cliente import cliente_bp
+    from .cliente.cliente import cliente_bp
+    from .sql.db import db_bp, get_db_cursor
 
     # Registrar los blueprints
     app.register_blueprint(compras_bp)
     app.register_blueprint(ventas_bp)
     app.register_blueprint(inventario_bp)
     app.register_blueprint(cliente_bp)
+    app.register_blueprint(db_bp)
 
     # Ruta raíz de la aplicación
     @app.route('/')
     def index():
-        return render_template('index.html')
+        """
+        cur = get_db_cursor()
+        cur.execute("SELECT nombre, descripcion, precio FROM producto")
+        productos = cur.fetchall()
+        """
+        return render_template("index.html")
 
     return app
 

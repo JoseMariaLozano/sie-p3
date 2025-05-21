@@ -17,7 +17,7 @@ def get_db():
     if "db" not in g:
         g.db = pg.connect(
             database='ecogeo',   # Asegúrate de que los valores sean correctos
-            user='jose',
+            user='ecogeo',
             password='ecogeo',
             host='localhost',
         )
@@ -44,12 +44,8 @@ def init_db():
     
     # Lista de archivos SQL a ejecutar
     sql_files = [
-        "schema.sql",
+        "ecogeo_schema.sql",
         "insertar.sql",
-        "trigger-clientes.sql",
-        "trigger-empleados.sql",
-        "trigger-vehiculos.sql",
-        "trigger-pedidos.sql"
     ]
     
     for sql_file in sql_files:

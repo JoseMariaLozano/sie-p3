@@ -109,3 +109,27 @@ INSERT INTO cliente (nombre, email, password) VALUES
 ('Luis Torres', 'luis@example.com', 'hashpass2'),
 ('Sofía Hernández', 'sofia@example.com', 'hashpass3'),
 ('Pablo Sánchez', 'pablo@example.com', 'hashpass4');
+
+-- Insertar productos tipo 1 (mudanza)
+INSERT INTO producto (cantidad, alerta, id_almacen, precio, descripcion, tipo)
+VALUES 
+(50, 10, 1, 25.00, 'Caja grande para mudanza con asas laterales', 1),
+(40, 8, 1, 20.00, 'Caja mediana resistente para mudanza', 1),
+(30, 5, 2, 30.00, 'Caja reforzada para objetos pesados', 1),
+(60, 12, 2, 18.00, 'Caja económica para mudanza', 1);
+
+-- Insertar productos tipo 2 (con tapa)
+INSERT INTO producto (cantidad, alerta, id_almacen, precio, descripcion, tipo)
+VALUES 
+(70, 15, 1, 22.00, 'Caja con tapa rígida reutilizable', 2),
+(45, 10, 2, 24.00, 'Caja plástica con tapa hermética', 2),
+(55, 12, 1, 20.00, 'Caja con tapa y cierres de seguridad', 2),
+(35, 8, 2, 26.00, 'Caja opaca con tapa para archivo', 2);
+
+-- Insertar productos tipo 3 (almacenaje)
+INSERT INTO producto (cantidad, alerta, id_almacen, precio, descripcion, tipo)
+VALUES 
+(80, 20, 1, 15.00, 'Caja de cartón apilable para almacenaje', 3),
+(90, 25, 2, 17.50, 'Caja organizadora con separadores', 3),
+(65, 18, 1, 16.00, 'Caja multiuso para trastero', 3),
+(75, 22, 2, 14.50, 'Caja plástica ligera para almacenaje', 3);

@@ -1,19 +1,27 @@
 <!doctype html>
-<title>{% block title %}{% endblock %} - ECOGEO</title>
-<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-<nav>
-  <h1><a href="{{ url_for('index') }}">ECOGEO</a></h1>
-  {% block nav %}{% endblock %}
-  <ul>
-    <li><a href="{{ url_for('db.init_db_from_app') }}">Iniciar la BD (desarrollo)</a>
-  </ul>
-</nav>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}{% endblock %} - ECOGEO</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+<header>
+    <a href="{{ url_for('index') }}">
+        <img src="https://via.placeholder.com/200x100?text=EcoGeo+Logo" alt="Logo EcoGeo">
+    </a>
+</header>
+
 <section class="content">
-  <header>
-    {% block header %}{% endblock %}
-  </header>
-  {% for message in get_flashed_messages() %}
-    <div class="flash">{{ message }}</div>
-  {% endfor %}
-  {% block content %}{% endblock %}
+    {% for message in get_flashed_messages() %}
+        <div class="flash">{{ message }}</div>
+    {% endfor %}
+
+    {% block content %}{% endblock %}
 </section>
+
+{% include "footer.html" %}
+
+</body>
+</html>
