@@ -7,8 +7,8 @@ from ..sql.db import get_db
 cliente_bp = Blueprint('cliente', __name__, url_prefix='/cliente')
 
 
-@cliente_bp.route('/registro', methods=['GET', 'POST'])
-def registro():
+@cliente_bp.route('/register', methods=['GET', 'POST'])
+def register():
     if request.method == 'POST':
         nombre = request.form['nombre']
         email = request.form['email']
