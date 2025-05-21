@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+{% block title %}Detalles del Producto{% endblock %}
+
+{% block content %}
+<div class="producto-detalle-container">
+    <!-- Panel izquierdo: Imagen del producto -->
+    <div class="producto-imagen">
+        <img src="{{ producto.imagen_url }}" alt="{{ producto.nombre }}" class="imagen-grande">
+    </div>
+
+    <!-- Panel derecho: Información del producto -->
+    <div class="producto-info">
+        <h2>{{ producto.nombre }}</h2>
+        <p class="descripcion">{{ producto.descripcion }}</p>
+        
+        <div class="detalle">
+            <label for="precio"><strong>Precio:</strong></label>
+            <p id="precio">{{ producto.precio }} €</p>
+        </div>
+        
+        <div class="detalle">
+            <label for="cantidad-disponible"><strong>Cantidad disponible:</strong></label>
+            <p id="cantidad-disponible">{{ producto.cantidad }}</p>
+        </div>
+
+        <div class="detalle">
+            <label for="tipo"><strong>Tipo:</strong></label>
+            <p id="tipo">{{ producto.tipo }}</p>
+        </div>
+
+        <div class="detalle">
+            <label for="cantidad"><strong>Cantidad:</strong></label>
+            <select id="cantidad" name="cantidad" class="form-input">
+                <option value="50">50</option>
+                <option value="100">100</option>
+                <option value="500">500</option>
+                <option value="1000">1000</option>
+            </select>
+        </div>
+
+        <button class="submit-btn" onclick="agregarAlCarrito()">Añadir al carrito</button>
+    </div>
+</div>
+
+<script>
+    function agregarAlCarrito() {
+        const cantidad = document.getElementById('cantidad').value;
+        alert(`Producto añadido al carrito: ${cantidad} unidades`);
+        // Aquí puedes agregar el código para añadir al carrito
+    }
+</script>
+{% endblock %}
+
