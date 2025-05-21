@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="category" id="{{ nombre_categoria | lower | replace(' ', '-') }}">
+    <h2>{{ nombre_categoria }}</h2>
+    <div class="product-grid">
+        {% for producto in productos %}
+        <div class="product-card">
+            <a href="#" class="image-link">
+                <img src="{{ url_for('static', filename='img/' ~ imagen_categoria) }}" alt="{{ nombre_categoria }}">
+            </a>
+            <div class="price">{{ producto.precio }} €</div>
+            <div class="description">{{ producto.descripcion }}</div>
+            <div class="size-buttons">
+                <button>Pequeña</button>
+                <button>Mediana</button>
+                <button>Grande</button>
+            </div>
+        </div>
+        {% else %}
+        <p>No hay productos disponibles en esta categoría.</p>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

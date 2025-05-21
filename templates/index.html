@@ -1,77 +1,53 @@
 {% extends "base.html" %}
-{% block title %}EcoGeo - Cajas de Cartón{% endblock %}
 
 {% block content %}
-<header>
-    <img src="https://via.placeholder.com/200x100?text=EcoGeo+Logo" alt="Logo EcoGeo">
-</header>
-
 <nav>
-    <div class="nav-left">
-        <a href="#mudanza">MUDANZA</a>
-        <a href="#almacenaje">ALMACENAJE</a>
-        <a href="#contapa">CON TAPA</a>
-    </div>
+    <nav>
+        <a href="{{ url_for('inventario.mostrar_categoria', categoria='mudanza') }}" style="margin-right: 15px;">Cajas para Mudanza</a>
+        <a href="{{ url_for('inventario.mostrar_categoria', categoria='contapa') }}" style="margin-right: 15px;">Cajas con Tapa</a>
+        <a href="{{ url_for('inventario.mostrar_categoria', categoria='almacenaje') }}">Cajas para Almacenaje</a>  
+    </nav>        
     <div class="nav-right">
-        <a href="/login">Login</a>
-        <a href="/register">Registro</a>
+        <a href="{{ url_for('cliente.login') }}">Login</a>
+        <a href="{{ url_for('cliente.register') }}">Registro</a>
     </div>
 </nav>
 
-<div class="category" id="mudanza">
-    <h2>Cajas para Mudanza</h2>
-    <div class="product-grid">
-        {% for i in range(3) %}
-        <div class="product-card">
-            <a href="#" class="image-link">
-                <img src="https://via.placeholder.com/300x200" alt="Producto Mudanza {{ i+1 }}">
-            </a>
-            <div class="price">{{ 12 + i*3 }},00 €</div>
-            <div class="size-buttons">
-                <button>Pequeña</button>
-                <button>Mediana</button>
-                <button>Grande</button>
-            </div>
-        </div>
-        {% endfor %}
-    </div>
-</div>
+<div class="contenedor-principal">
 
-<div class="category" id="almacenaje">
-    <h2>Cajas para Almacenaje</h2>
-    <div class="product-grid">
-        {% for i in range(3) %}
-        <div class="product-card">
-            <a href="#" class="image-link">
-                <img src="https://via.placeholder.com/300x200" alt="Producto Almacenaje {{ i+1 }}">
-            </a>
-            <div class="price">{{ 10 + i*3 }},00 €</div>
-            <div class="size-buttons">
-                <button>Pequeña</button>
-                <button>Mediana</button>
-                <button>Grande</button>
-            </div>
-        </div>
-        {% endfor %}
-    </div>
-</div>
+    <!-- Sección 1: Sobre Nosotros -->
+    <section id="sobre-nosotros" class="seccion seccion-sobre">
+        <h2>Sobre Nosotros</h2>
+        <p>
+            En <strong>EcoGeo</strong> creemos en un futuro sostenible y responsable. 
+            Nuestra misión es ofrecer soluciones de embalaje ecológicas y eficientes, 
+            elaboradas a partir de materiales reciclados y con procesos respetuosos con el medio ambiente. 
+            Fabricamos cajas de cartón duraderas, reutilizables y 100% biodegradables, 
+            pensadas para empresas y particulares que valoran la calidad y la sostenibilidad.
+        </p>
+    </section>
 
-<div class="category" id="contapa">
-    <h2>Cajas con Tapa</h2>
-    <div class="product-grid">
-        {% for i in range(3) %}
-        <div class="product-card">
-            <a href="#" class="image-link">
-                <img src="https://via.placeholder.com/300x200" alt="Producto Con Tapa {{ i+1 }}">
-            </a>
-            <div class="price">{{ 14 + i*5 }},00 €</div>
-            <div class="size-buttons">
-                <button>Pequeña</button>
-                <button>Mediana</button>
-                <button>Grande</button>
-            </div>
+    <!-- Sección 2: Historial de la empresa -->
+    <section id="historial" class="seccion seccion-historial">
+        <h2>Historial de la Empresa</h2>
+        <p>
+            EcoGeo nació como parte de un proyecto académico en la Universidad de Granada, dentro de la asignatura de Sistemas de Información para Empresas. 
+            Lo que empezó como un ejercicio universitario se transformó en una auténtica pasión por el diseño sostenible y el impacto positivo. 
+            Detectamos la necesidad de embalajes ecológicos en el sector de la logística y decidimos seguir desarrollando la idea. 
+            Actualmente colaboramos con pequeñas empresas locales para proporcionarles cajas ecológicas que se adaptan a sus necesidades logísticas y de imagen de marca.
+        </p>
+    </section>
+
+    <!-- Sección 3: Fundadores -->
+    <section id="fundadores" class="seccion seccion-fundadores">
+        <h2>Fundadores</h2>
+        <div class="fundadores">
+            <div>Ana Velasco</div>
+            <div>Javier Muñoz</div>
+            <div>Lucía Ortega</div>
+            <div>Sergio Morales</div>
         </div>
-        {% endfor %}
-    </div>
+    </section>
+
 </div>
 {% endblock %}

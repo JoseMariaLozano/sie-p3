@@ -191,6 +191,57 @@ a.image-link {
   
 /* fin estilo de los formularios */
 
+<<<<<<< HEAD
+=======
+/* estilos de index.html sobre nosotros */
+
+.contenedor-principal {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+.seccion {
+    padding: 3rem 2rem;
+    margin-bottom: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+.seccion h2 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+}
+
+.seccion p {
+    font-size: 1.1rem;
+    line-height: 1.6;
+}
+
+.seccion-sobre {
+    background-color: #e8d3c5;
+}
+
+.seccion-historial {
+    background-color: #cde2c0;
+}
+
+.seccion-fundadores {
+    background-color: #bfa290;
+}
+
+.fundadores {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    font-size: 1.2rem;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+/* fin estilos de index.html sobre nosotros */
+
+>>>>>>> ce336c6edcb8e4432e7c1317758d9c64e52ae808
 /* inicio estilo carrito */
 
 h1 {
@@ -255,4 +306,8 @@ h1 {
     background-color: #2980b9;
 }
 
+<<<<<<< HEAD
 /* fin estilo carrito */
+=======
+/* fin estilo carrito */
+>>>>>>> ce336c6edcb8e4432e7c1317758d9c64e52ae808
