@@ -7,7 +7,7 @@ cliente_bp = Blueprint('cliente', __name__, url_prefix='/cliente')
 
 @cliente_bp.route('/register', methods=['GET', 'POST'])
 
-def registro():
+def register():
     if request.method == 'POST':
         nombre = request.form.get('nombre')
         email = request.form.get('email')
