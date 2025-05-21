@@ -1,5 +1,4 @@
 {% extends "base.html" %}
-
 {% block title %}Carrito{% endblock %}
 
 {% block content %}
@@ -26,7 +25,7 @@
             <td>{{ item.tipo }}</td>
             <td>{{ item.precio }} €</td>
             <td>{{ item.cantidad }}</td>
-            <td>{{ item.precio * item.cantidad }} €</td>
+            <td>{{ "%.2f"|format(item.precio * item.cantidad) }} €</td>
             <td>
                 <form method="post" action="{{ url_for('cliente.eliminar_del_carrito', id=item.id) }}">
                     <button class="btn-eliminar" type="submit">Eliminar</button>
@@ -38,15 +37,14 @@
 </table>
 
 <div class="carrito-total">
-    <strong>Total:</strong> {{ total }} €
+    <strong>Total:</strong> {{ "%.2f"|format(total) }} €
 </div>
 
 <div class="carrito-acciones">
-    <a class="btn-finalizar" href="{{ url_for('cliente.finalizar_compra') }}">Finalizar Compra</a>
+    <a class="btn-finalizar" href="#">Finalizar Compra</a>
 </div>
 
 {% else %}
 <p>Tu carrito está vacío.</p>
 {% endif %}
-
 {% endblock %}
