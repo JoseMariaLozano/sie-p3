@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% block content %}
+  <main class="form-container" role="main">
+    <h2 class="form-title">Inicio de Sesión</h2>
+
+    <!-- Mensajes de error del backend (si los hay) -->
+    {% if error_message %}
+      <div class="form-error" role="alert">
+        {{ error_message }}
+      </div>
+    {% endif %}
+
+    <form method="post" class="custom-form" novalidate>
+      <!-- CSRF token si usas Django, Flask, etc. -->
+      {% csrf_token %}
+
+      <!-- Email -->
+      <label for="email">Email:</label>
+      <input 
+        type="email" 
+        name="email" 
+        id="email" 
+        required 
+        autocomplete="email"
+        aria-describedby="emailHelp"
+      >
+      <small id="emailHelp" class="form-helper">Introduce tu correo electrónico empresarial</small>
+
+      <!-- Password -->
+      <label for="password">Contraseña:</label>
+      <input 
+        type="password" 
+        name="password" 
+        id="password" 
+        required 
+        minlength="6"
+        autocomplete="current-password"
+      >
+
+      <!-- Botón -->
+      <input type="submit" value="Iniciar Sesión" class="submit-btn">
+    </form>
+  </main>
+{% endblock %}
+
