@@ -103,33 +103,37 @@ INSERT INTO orden_compra (ID_Proveedor, ID_Factura, Fecha_Emision, Estado, Fecha
 (3, 3, '2025-04-03', 'Entregado', '2025-04-06', 'Cinta Aislante', 'Sin incidencias'),
 (4, 4, '2025-04-04', 'En camino', NULL, 'Tuercas 5mm', 'Revisión logística');
 
--- Clientes (por si usas la tabla cliente también)
-INSERT INTO cliente (nombre, email, password) VALUES
-('María López', 'maria@example.com', 'hashpass1'),
-('Luis Torres', 'luis@example.com', 'hashpass2'),
-('Sofía Hernández', 'sofia@example.com', 'hashpass3'),
-('Pablo Sánchez', 'pablo@example.com', 'hashpass4');
+INSERT INTO cliente (
+  nombre, email, password, direccion, telefono, es_empresa, nombre_empresa,
+  tarjeta_numero, tarjeta_mes_expiracion, tarjeta_anio_expiracion, tarjeta_cvv
+) VALUES
+('María López', 'maria@example.com', 'hashpass1', 'Calle Sol 123, Madrid', '612345678', FALSE, 'default', '4111111111111111', 12, 2026, '123'),
+('Luis Torres', 'luis@example.com', 'hashpass2', 'Avenida Luna 45, Valencia', '699998877', TRUE, 'Logística Torres SL', '4000123412341234', 8, 2025, '456'),
+('Sofía Hernández', 'sofia@example.com', 'hashpass3', 'Calle Mayor 10, Sevilla', '633223344', FALSE, 'default', '5555555555554444', 3, 2027, '789'),
+('Pablo Sánchez', 'pablo@example.com', 'hashpass4', 'Camino Verde 88, Zaragoza', '655112233', TRUE, 'PabloS Group', '378282246310005', 11, 2024, '321');
+
 
 -- Insertar productos tipo 1 (mudanza)
-INSERT INTO producto (cantidad, alerta, id_almacen, precio, descripcion, tipo)
+INSERT INTO producto (cantidad, alerta, id_almacen, precio, descripcion, tipo, tamano)
 VALUES 
-(50, 10, 1, 25.00, 'Caja grande para mudanza con asas laterales', 1),
-(40, 8, 1, 20.00, 'Caja mediana resistente para mudanza', 1),
-(30, 5, 2, 30.00, 'Caja reforzada para objetos pesados', 1),
-(60, 12, 2, 18.00, 'Caja económica para mudanza', 1);
+(50, 10, 1, 25.00, 'Caja grande para mudanza con asas laterales', 1, 'grande'),
+(40, 8, 1, 20.00, 'Caja mediana resistente para mudanza', 1, 'mediano'),
+(30, 5, 2, 30.00, 'Caja reforzada para objetos pesados', 1, 'grande'),
+(60, 12, 2, 18.00, 'Caja económica para mudanza', 1, 'pequeño');
 
 -- Insertar productos tipo 2 (con tapa)
-INSERT INTO producto (cantidad, alerta, id_almacen, precio, descripcion, tipo)
+INSERT INTO producto (cantidad, alerta, id_almacen, precio, descripcion, tipo, tamano)
 VALUES 
-(70, 15, 1, 22.00, 'Caja con tapa rígida reutilizable', 2),
-(45, 10, 2, 24.00, 'Caja plástica con tapa hermética', 2),
-(55, 12, 1, 20.00, 'Caja con tapa y cierres de seguridad', 2),
-(35, 8, 2, 26.00, 'Caja opaca con tapa para archivo', 2);
+(70, 15, 1, 22.00, 'Caja con tapa rígida reutilizable', 2, 'mediano'),
+(45, 10, 2, 24.00, 'Caja plástica con tapa hermética', 2, 'mediano'),
+(55, 12, 1, 20.00, 'Caja con tapa y cierres de seguridad', 2, 'pequeño'),
+(35, 8, 2, 26.00, 'Caja opaca con tapa para archivo', 2, 'grande');
 
 -- Insertar productos tipo 3 (almacenaje)
-INSERT INTO producto (cantidad, alerta, id_almacen, precio, descripcion, tipo)
+INSERT INTO producto (cantidad, alerta, id_almacen, precio, descripcion, tipo, tamano)
 VALUES 
-(80, 20, 1, 15.00, 'Caja de cartón apilable para almacenaje', 3),
-(90, 25, 2, 17.50, 'Caja organizadora con separadores', 3),
-(65, 18, 1, 16.00, 'Caja multiuso para trastero', 3),
-(75, 22, 2, 14.50, 'Caja plástica ligera para almacenaje', 3);
+(80, 20, 1, 15.00, 'Caja de cartón apilable para almacenaje', 3, 'mediano'),
+(90, 25, 2, 17.50, 'Caja organizadora con separadores', 3, 'mediano'),
+(65, 18, 1, 16.00, 'Caja multiuso para trastero', 3, 'pequeño'),
+(75, 22, 2, 14.50, 'Caja plástica ligera para almacenaje', 3, 'pequeño');
+

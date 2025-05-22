@@ -15,6 +15,9 @@ DROP TABLE IF EXISTS factura CASCADE;
 DROP TABLE IF EXISTS insumo CASCADE;
 DROP TABLE IF EXISTS proveedor CASCADE;
 DROP TABLE IF EXISTS producto CASCADE;
+DROP TABLE IF EXISTS cliente CASCADE;
+DROP TABLE IF EXISTS ticket CASCADE;
+DROP TABLE IF EXISTS carrito CASCADE;
 
 CREATE TABLE producto (
     id_producto SERIAL PRIMARY KEY,
@@ -23,7 +26,8 @@ CREATE TABLE producto (
     id_almacen INTEGER NOT NULL,
     precio NUMERIC(10,2) NOT NULL CHECK (precio >= 0),
     descripcion TEXT,
-    tipo SMALLINT NOT NULL CHECK (tipo IN (1, 2, 3))
+    tipo SMALLINT NOT NULL CHECK (tipo IN (1, 2, 3)),
+    tamano TEXT CHECK (tamano IN ('pequeño', 'mediano', 'grande'))
 );
 
 -- Tabla Empleado
@@ -135,7 +139,15 @@ CREATE TABLE cliente (
     id SERIAL PRIMARY KEY,
     nombre VARCHAR(100) NOT NULL,
     email VARCHAR(100) NOT NULL UNIQUE,
-    password TEXT NOT NULL
+    password TEXT NOT NULL,
+    direccion TEXT NOT NULL,
+    telefono VARCHAR(20),
+    es_empresa BOOLEAN NOT NULL DEFAULT FALSE,
+    nombre_empresa VARCHAR(100) NOT NULL DEFAULT 'default',
+    tarjeta_numero VARCHAR(20) NOT NULL,
+    tarjeta_mes_expiracion INT NOT NULL,
+    tarjeta_anio_expiracion INT NOT NULL,
+    tarjeta_cvv VARCHAR(4) NOT NULL
 );
 
 
@@ -193,4 +205,19 @@ CREATE TABLE Factura_Insumo (
     PRIMARY KEY (ID_Factura, GTIN_Insumo),
     FOREIGN KEY (ID_Factura) REFERENCES Factura(ID_Factura) ON DELETE CASCADE,
     FOREIGN KEY (GTIN_Insumo) REFERENCES Insumo(GTIN_Insumo) ON DELETE CASCADE
+);
+
+CREATE TABLE ticket (
+    id SERIAL PRIMARY KEY,
+    id_cliente INT NOT NULL REFERENCES cliente(id),
+    fecha TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    estado VARCHAR(20) NOT NULL DEFAULT 'abierto' -- abierto, pagado, cancelado, etc.
+);
+
+CREATE TABLE carrito (
+    id SERIAL PRIMARY KEY,
+    id_ticket INT NOT NULL REFERENCES ticket(id) ON DELETE CASCADE,
+    id_producto INT NOT NULL REFERENCES producto(id_producto) ON DELETE CASCADE,
+    cantidad INT NOT NULL CHECK (cantidad > 0),
+    precio_unitario NUMERIC(10,2) NOT NULL CHECK (precio_unitario >= 0)
 );
