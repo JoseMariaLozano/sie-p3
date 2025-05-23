@@ -1,0 +1,118 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <main class="form-container" role="main">
+    <h2 class="form-title">Tu Carrito</h2>
+
+    <div class="cart-container" style="display: flex; gap: 2rem; border: 1px solid #ccc; border-radius: 12px; padding: 20px;">
+      <!-- IZQUIERDA: Lista de productos y total -->
+      <section class="cart-left" style="flex: 1;">
+        {% if carrito %}
+          <form method="post" action="{{ url_for('ventas.actualizar_carrito') }}">
+            <ul style="list-style: none; padding: 0;">
+              {% for producto in carrito %}
+                <li style="margin-bottom: 1rem; border-bottom: 1px solid #ddd; padding-bottom: 1rem;">
+                  <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <div>
+                      <strong>{{ producto.descripcion }}</strong><br>
+                      Precio unitario: {{ producto.precio_unitario }}€<br>
+                    </div>
+
+                    <div>
+                      <label for="cantidad_{{ producto.id }}">Cantidad:</label>
+                      <input
+                        type="number"
+                        name="cantidad_{{ producto.id }}"
+                        id="cantidad_{{ producto.id }}"
+                        min="1"
+                        value="{{ producto.cantidad }}"
+                        style="width: 60px;"
+                      >
+                    </div>
+                  </div>
+                </li>
+              {% endfor %}
+            </ul>
+
+            <button type="submit" class="submit-btn" style="margin-top: 1rem;">Actualizar Cantidades</button>
+          </form>
+
+          <p style="margin-top: 2rem; font-weight: bold; font-size: 1.2rem;">
+            Precio total: {{ precio_total }}€
+          </p>
+        {% else %}
+          <p>Tu carrito está vacío.</p>
+        {% endif %}
+    </section>
+
+    <!-- DERECHA: Datos de facturación -->
+      <section class="cart-right" style="flex: 1;">
+          <h3>Datos de Facturación</h3>
+          <form method="post" action="{{ url_for('ventas.realizar_pago') }}">
+      
+          <div style="margin-bottom: 1rem;">
+              <label for="numero_tarjeta">Número de tarjeta:</label>
+              <input
+              type="text"
+              id="numero_tarjeta"
+              name="numero_tarjeta"
+              value="{{ facturacion.numero_tarjeta }}"
+              required
+              maxlength="19"
+              pattern="[0-9\s]+"
+              placeholder="1234 5678 9012 3456"
+              style="width: 100%;"
+              >
+          </div>
+      
+          <div style="margin-bottom: 1rem;">
+              <label for="mes_caducidad">Mes caducidad (1-12):</label>
+              <input
+              type="number"
+              id="mes_caducidad"
+              name="mes_caducidad"
+              min="1"
+              max="12"
+              value="{{ facturacion.mes_caducidad }}"
+              required
+              style="width: 100%;"
+              >
+          </div>
+      
+          <div style="margin-bottom: 1rem;">
+              <label for="ano_caducidad">Año caducidad (>=2024):</label>
+              <input
+              type="number"
+              id="ano_caducidad"
+              name="ano_caducidad"
+              min="2024"
+              value="{{ facturacion.ano_caducidad }}"
+              required
+              style="width: 100%;"
+              >
+          </div>
+      
+          <div style="margin-bottom: 1rem;">
+              <label for="cvv">CVV:</label>
+              <input
+              type="text"
+              id="cvv"
+              name="cvv"
+              value="{{ facturacion.cvv }}"
+              required
+                name="cvv"
+                value="{{ facturacion.cvv }}"
+                required
+                maxlength="4"
+                pattern="[0-9]{3,4}"
+                placeholder="123"
+                style="width: 100%;"
+                >
+            </div>
+        
+            <button type="submit" class="submit-btn" style="margin-top: 1rem;">Pagar</button>
+            </form>
+        </section>
+    </div>
+  </main>
+{% endblock %}

@@ -1,25 +1,82 @@
 {% extends "base.html" %}
 
 {% block content %}
+
+{% include "navbar.html" %}
+
 <div class="category" id="{{ nombre_categoria | lower | replace(' ', '-') }}">
     <h2>{{ nombre_categoria }}</h2>
-    <div class="product-grid">
+
+    <!-- Filtros encima del listado -->
+    <div style="margin-bottom: 1rem;">
+        <label for="sizeFilter">Tamaño:</label>
+        <select id="sizeFilter">
+            <option value="todos">Todos</option>
+            <option value="pequeño">Pequeño</option>
+            <option value="mediano">Mediano</option>
+            <option value="grande">Grande</option>
+        </select>
+
+        <label for="priceOrder">Ordenar por precio:</label>
+        <select id="priceOrder">
+            <option value="none">Sin ordenar</option>
+            <option value="asc">Menor a mayor</option>
+            <option value="desc">Mayor a menor</option>
+        </select>
+    </div>
+
+    <div class="product-grid" id="productGrid">
         {% for producto in productos %}
-        <div class="product-card">
-            <a href="#" class="image-link">
+        <div class="product-card" data-tamano="{{ producto.tamano }}" data-precio="{{ producto.precio }}">
+            <!-- Enlace a la página de detalle del producto -->
+            <a href="{{ url_for('inventario.detalle_producto', producto_id=producto.id_producto) }}" class="image-link">
                 <img src="{{ url_for('static', filename='img/' ~ imagen_categoria) }}" alt="{{ nombre_categoria }}">
-            </a>
+            </a>            
             <div class="price">{{ producto.precio }} €</div>
             <div class="description">{{ producto.descripcion }}</div>
-            <div class="size-buttons">
-                <button>Pequeña</button>
-                <button>Mediana</button>
-                <button>Grande</button>
-            </div>
         </div>
         {% else %}
         <p>No hay productos disponibles en esta categoría.</p>
         {% endfor %}
     </div>
 </div>
+
+<script>
+    const sizeFilter = document.getElementById('sizeFilter');
+    const priceOrder = document.getElementById('priceOrder');
+    const productGrid = document.getElementById('productGrid');
+
+    function applyFilters() {
+        const sizeValue = sizeFilter.value;
+        const priceValue = priceOrder.value;
+
+        let products = Array.from(productGrid.getElementsByClassName('product-card'));
+
+        // Mostrar/ocultar productos según tamaño
+        products.forEach(p => {
+            const tamano = p.getAttribute('data-tamano');
+            if (sizeValue === 'todos' || tamano === sizeValue) {
+                p.style.display = '';
+            } else {
+                p.style.display = 'none';
+            }
+        });
+
+        // Reordenar por precio solo los visibles
+        if (priceValue !== 'none') {
+            const visibleProducts = products.filter(p => p.style.display !== 'none');
+            visibleProducts.sort((a, b) => {
+                const precioA = parseFloat(a.getAttribute('data-precio'));
+                const precioB = parseFloat(b.getAttribute('data-precio'));
+                return priceValue === 'asc' ? precioA - precioB : precioB - precioA;
+            });
+
+            // Reinsertar en el DOM
+            visibleProducts.forEach(p => productGrid.appendChild(p));
+        }
+    }
+
+    sizeFilter.addEventListener('change', applyFilters);
+    priceOrder.addEventListener('change', applyFilters);
+</script>
 {% endblock %}

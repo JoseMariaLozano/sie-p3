@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="form-container">
+  <h2 class="form-title">Registro de Cliente</h2>
+  <form method="POST" action="{{ url_for('cliente.register') }}" class="custom-form">
+    <label for="nombre">Nombre completo:</label>
+    <input type="text" name="nombre" id="nombre" required>
+
+    <label for="email">Correo electrónico:</label>
+    <input type="email" name="email" id="email" required>
+
+    <label for="password">Contraseña:</label>
+    <input type="password" name="password" id="password" required>
+
+    <label for="direccion">Dirección:</label>
+    <input type="text" name="direccion" id="direccion" required>
+
+    <label for="telefono">Teléfono:</label>
+    <input type="text" name="telefono" id="telefono">
+
+    <div class="empresa-opcion">
+      <input type="checkbox" id="es_empresa" name="es_empresa" onchange="toggleEmpresaInput()">
+      <label for="es_empresa">¿Es una empresa?</label>
+    </div>
+
+    <div id="empresa-container" style="display: none;">
+      <label for="nombre_empresa">Nombre de la empresa:</label>
+      <input type="text" name="nombre_empresa" id="nombre_empresa">
+    </div>
+
+    <h3>Datos de facturación</h3>
+
+    <label for="tarjeta_numero">Número de tarjeta:</label>
+    <input type="text" name="tarjeta_numero" id="tarjeta_numero" required pattern="\d{13,19}" maxlength="19">
+
+    <label for="tarjeta_mes_expiracion">Mes de expiración:</label>
+    <input type="number" name="tarjeta_mes_expiracion" id="tarjeta_mes_expiracion" min="1" max="12" required>
+    
+    <label for="tarjeta_anio_expiracion">Año de expiración:</label>
+    <input type="number" name="tarjeta_anio_expiracion" id="tarjeta_anio_expiracion" min="2024" max="2100" required>    
+
+    <label for="tarjeta_cvv">CVV:</label>
+    <input type="text" name="tarjeta_cvv" id="tarjeta_cvv" required pattern="\d{3,4}" maxlength="4">
+
+    <input type="submit" value="Registrarse" class="submit-btn">
+  </form>
+</div>
+
+<script>
+  function toggleEmpresaInput() {
+    const empresaContainer = document.getElementById('empresa-container');
+    const check = document.getElementById('es_empresa');
+    empresaContainer.style.display = check.checked ? 'block' : 'none';
+    if (!check.checked) {
+      document.getElementById('nombre_empresa').value = '';
+    }
+  }
+</script>
+{% endblock %}

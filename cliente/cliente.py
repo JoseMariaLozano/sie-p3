@@ -5,54 +5,60 @@ from ..sql.db import get_db_cursor
 cliente_bp = Blueprint('cliente', __name__, url_prefix='/cliente')
 
 
-@cliente_bp.route('/register', methods=['GET', 'POST'])
+from flask import flash
 
+@cliente_bp.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
-        nombre = request.form.get('nombre')
-        email = request.form.get('email')
-        password = request.form.get('password')
+        nombre = request.form['nombre']
+        email = request.form['email']
+        password = request.form['password']
+        direccion = request.form['direccion']
+        telefono = request.form.get('telefono', '')
+        es_empresa = 'es_empresa' in request.form
+        nombre_empresa = request.form.get('nombre_empresa') if es_empresa else 'default'
 
-        cursor, conn = get_db_cursor()
-        error = None
+        tarjeta_numero = request.form['tarjeta_numero']
+        try:
+            tarjeta_mes_expiracion = int(request.form['tarjeta_mes_expiracion'])
+            tarjeta_anio_expiracion = int(request.form['tarjeta_anio_expiracion'])
+        except ValueError:
+            flash('Mes y año de expiración deben ser números válidos.', 'error')
+            return render_template('cliente/register.html')
 
-        if not nombre or not email or not password:
-            error = 'Todos los campos son obligatorios.'
+        tarjeta_cvv = request.form['tarjeta_cvv']
 
-        else:
-            cursor.execute('SELECT id FROM cliente WHERE email = %s', (email,))
-            if cursor.fetchone():
-                error = 'Ya existe un cliente con ese email.'
+        # Validación de mes y año
+        if not (1 <= tarjeta_mes_expiracion <= 12):
+            flash('El mes de expiración debe estar entre 1 y 12.', 'error')
+            return render_template('cliente/register.html')
+        if tarjeta_anio_expiracion < 2024:
+            flash('El año de expiración debe ser 2024 o superior.', 'error')
+            return render_template('cliente/register.html')
 
-        if error is None:
-            try:
-                cursor.execute(
-                    'INSERT INTO cliente (nombre, email, password) VALUES (%s, %s, %s)',
-                    (nombre, email, generate_password_hash(password))
-                )
-                conn.commit()
-                flash('¡Registro exitoso! Ahora puedes iniciar sesión.')
-                return redirect(url_for('cliente.login'))
-            except Exception as e:
-                conn.rollback()
-                error = f'Error al registrar cliente: {str(e)}'
+        # Aquí irían más validaciones o hashing de password
 
-        elif db.execute('SELECT id FROM cliente WHERE email = %s', (email,)).fetchone():
-            error = 'Ya existe un cliente con ese email.'
-
-        if error is None:
-            db.execute(
-                'INSERT INTO cliente (nombre, email, password) VALUES (%s, %s, %s)',
-                (nombre, email, generate_password_hash(password))
-            )
-            db.commit()
-            flash('¡Registro exitoso!')
+        
+        try:
+            cur = get_db_cursor()
+            cur.execute("""
+                INSERT INTO cliente (
+                    nombre, email, password, direccion, telefono, es_empresa, nombre_empresa,
+                    tarjeta_numero, tarjeta_mes_expiracion, tarjeta_anio_expiracion, tarjeta_cvv
+                ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+            """, (
+                nombre, email, password, direccion, telefono, es_empresa, nombre_empresa,
+                tarjeta_numero, tarjeta_mes_expiracion, tarjeta_anio_expiracion, tarjeta_cvv
+            ))
+            cur.execute('COMMIT;')
+            flash('Registro completado con éxito', 'success')
             return redirect(url_for('cliente.login'))
+        except Exception as e:
+            flash(f'Error al registrar cliente: {e}', 'error')
+            return render_template('cliente/register.html')
 
+    return render_template('cliente/register.html')
 
-        flash(error)
-
-    return render_template('cliente/registro.html')
 
 
 @cliente_bp.route('/login', methods=['GET', 'POST'])
@@ -60,36 +66,45 @@ def login():
     if request.method == 'POST':
         email = request.form['email']
         password = request.form['password']
-        db = get_db_cursor()
         error = None
 
-        cliente = db.execute(
-            'SELECT * FROM cliente WHERE email = %s', (email,)
-        ).fetchone()
-
         try:
-            cursor.execute('SELECT * FROM cliente WHERE email = %s', (email,))
-            cliente = cursor.fetchone()
+            cur = get_db_cursor()
+            cur.execute('SELECT * FROM cliente WHERE email = %s', (email,))
+            cliente = cur.fetchone()
+            cur.execute('COMMIT;')
 
             if cliente is None:
                 error = 'Usuario no encontrado.'
-            elif not check_password_hash(cliente['password'], password):
+            elif not cliente['password'] == password:
                 error = 'Contraseña incorrecta.'
             else:
                 session.clear()
-                session['cliente_id'] = cliente['id']
+                session['id_cliente'] = cliente['id']
                 session['cliente_nombre'] = cliente['nombre']
                 return redirect(url_for('index'))
 
         except Exception as e:
             error = f'Ocurrió un error al iniciar sesión: {str(e)}'
 
-        flash(error)
+        flash(error, 'error')
 
     return render_template('cliente/login.html')
 
 
 @cliente_bp.route('/logout')
 def logout():
+    id_cliente = session.get("id_cliente")
+    cur = get_db_cursor()
+
+    if id_cliente:
+        cur.execute("""
+            DELETE FROM ticket
+            WHERE id_cliente = %s AND estado = 'abierto';
+        """, (id_cliente,))
+        cur.execute("COMMIT;")
+
     session.clear()
-    return redirect(url_for('index'))
+    flash("Sesión cerrada y carrito cancelado.", "info")
+    return render_template("index.html")
+

@@ -1,0 +1,21 @@
+<nav>
+    <nav>
+        <a href="{{ url_for('inventario.mostrar_categoria', categoria='mudanza') }}" style="margin-right: 15px;">Cajas para Mudanza</a>
+        <a href="{{ url_for('inventario.mostrar_categoria', categoria='contapa') }}" style="margin-right: 15px;">Cajas con Tapa</a>
+        <a href="{{ url_for('inventario.mostrar_categoria', categoria='almacenaje') }}">Cajas para Almacenaje</a>  
+    </nav>        
+    <div class="nav-right">
+        {% if session.get('id_cliente') %}
+            <div class="dropdown">
+                <button class="dropbtn">{{ session['cliente_nombre'] }}</button>
+                <div class="dropdown-content">
+                    <a href="{{ url_for('cliente.logout') }}">Cerrar sesión</a>
+                </div>
+            </div>
+            <a href="{{ url_for('ventas.mostrar_carrito') }}" style="margin-left: 15px;">🛒 Carrito</a>
+        {% else %}
+            <a href="{{ url_for('cliente.login') }}">Login</a>
+            <a href="{{ url_for('cliente.register') }}">Registro</a>
+        {% endif %}
+    </div>
+</nav>

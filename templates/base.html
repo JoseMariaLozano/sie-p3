@@ -17,9 +17,10 @@
 
 <header>
     <a href="{{ url_for('index') }}">
-        <img src="../static/img/logo.jpeg" alt="Logo EcoGeo">
+        <img src="/static/img/logo.jpeg" alt="Logo EcoGeo">
     </a>
 </header>
+
 
 <section class="content">
     {% for message in get_flashed_messages() %}

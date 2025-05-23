@@ -1,54 +1,162 @@
 {% extends 'base.html' %}
 
+
+
 {% block title %}Detalles del Producto{% endblock %}
 
 {% block content %}
-<div class="producto-detalle-container">
-    <!-- Panel izquierdo: Imagen del producto -->
-    <div class="producto-imagen">
-        <img src="{{ producto.imagen_url }}" alt="{{ producto.nombre }}" class="imagen-grande">
-    </div>
 
-    <!-- Panel derecho: Información del producto -->
-    <div class="producto-info">
-        <h2>{{ producto.nombre }}</h2>
-        <p class="descripcion">{{ producto.descripcion }}</p>
-        
-        <div class="detalle">
-            <label for="precio"><strong>Precio:</strong></label>
-            <p id="precio">{{ producto.precio }} €</p>
-        </div>
-        
-        <div class="detalle">
-            <label for="cantidad-disponible"><strong>Cantidad disponible:</strong></label>
-            <p id="cantidad-disponible">{{ producto.cantidad }}</p>
+{% include "navbar.html" %}
+
+<div class="producto-detalle-wrapper">
+    <div class="producto-detalle-container">
+        <!-- Panel izquierdo: Imagen del producto -->
+        <div class="producto-imagen">
+            <img src="{{ url_for('static', filename='img/' ~ imagen_categoria) }}" alt="{{ producto.descripcion }}" class="imagen-grande">
         </div>
 
-        <div class="detalle">
-            <label for="tipo"><strong>Tipo:</strong></label>
-            <p id="tipo">{{ producto.tipo }}</p>
-        </div>
+        <!-- Panel derecho: Información del producto -->
+        <div class="producto-info">
+            <h2>{{ producto.nombre }}</h2>
+            <p class="descripcion">{{ producto.descripcion }}</p>
+            
+            <div class="detalle-linea">
+                <label>Precio unitario:</label>
+                <span>{{ producto.precio }} €</span>
+            </div>
+            
+            <div class="detalle-linea">
+                <label>Cantidad disponible:</label>
+                <span>{{ producto.cantidad }}</span>
+            </div>
 
-        <div class="detalle">
-            <label for="cantidad"><strong>Cantidad:</strong></label>
-            <select id="cantidad" name="cantidad" class="form-input">
-                <option value="50">50</option>
-                <option value="100">100</option>
-                <option value="500">500</option>
-                <option value="1000">1000</option>
-            </select>
-        </div>
+            <div class="detalle-linea">
+                <label>Tipo:</label>
+                <span>{{ producto.tipo }}</span>
+            </div>
 
-        <button class="submit-btn" onclick="agregarAlCarrito()">Añadir al carrito</button>
+            <form action="{{ url_for('ventas.añadir_carrito') }}" method="POST">
+                <input type="hidden" name="id_producto" value="{{ producto.id_producto }}">
+                <input type="hidden" name="precio_unitario" value="{{ producto.precio }}">
+                
+                <div class="detalle-linea">
+                    <label for="cantidad">Cantidad:</label>
+                    <select id="cantidad" name="cantidad" class="form-input">
+                        {% set opciones = [1, 50, 100, 500, 1000] %}
+                        {% for opcion in opciones %}
+                            {% if opcion <= producto['cantidad'] %}
+                                <option value="{{ opcion }}">{{ opcion }}</option>
+                            {% else %}
+                                <option value="{{ opcion }}" disabled style="color: gray;">{{ opcion }} (sin stock)</option>
+                            {% endif %}
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="detalle-linea">
+                    <label>Total:</label>
+                    <span id="precio-total">{{ producto.precio }} €</span>
+                </div>
+            
+                <button type="submit" class="submit-btn">Añadir al carrito</button>
+            </form>
+
+            
+
+            
+        </div>
     </div>
 </div>
 
 <script>
-    function agregarAlCarrito() {
-        const cantidad = document.getElementById('cantidad').value;
-        alert(`Producto añadido al carrito: ${cantidad} unidades`);
-        // Aquí puedes agregar el código para añadir al carrito
-    }
-</script>
-{% endblock %}
+    document.addEventListener("DOMContentLoaded", function () {
+        const cantidadSelect = document.getElementById("cantidad");
+        const precioUnitarioTexto = document.querySelector(".detalle-linea span").textContent;
+        const precioUnitario = parseFloat(precioUnitarioTexto.replace("€", "").trim());
+        const precioTotalSpan = document.getElementById("precio-total");
+    
+        function actualizarPrecioTotal() {
+            const cantidad = parseInt(cantidadSelect.value) || 0;
+            const total = (precioUnitario * cantidad).toFixed(2);
+            precioTotalSpan.textContent = total + " €";
+        }
+    
+        cantidadSelect.addEventListener("change", actualizarPrecioTotal);
+        actualizarPrecioTotal(); // Inicializa al cargar la página
+    });
+</script>    
 
+
+<style>
+    /* Envoltorio general para centrar con márgenes laterales */
+    .producto-detalle-wrapper {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 2rem;
+    }
+
+    .producto-detalle-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 2rem;
+    }
+
+    .producto-imagen {
+        flex: 1;
+        min-width: 300px;
+    }
+
+    .producto-imagen img.imagen-grande {
+        max-width: 100%;
+        height: auto;
+        border-radius: 8px;
+    }
+
+    .producto-info {
+        flex: 1;
+        min-width: 300px;
+        padding-right: 1rem;
+        padding-left: 1rem;
+    }
+
+    .descripcion {
+        margin-bottom: 1rem;
+        font-style: italic;
+    }
+
+    .detalle-linea {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
+    }
+
+    .detalle-linea label {
+        font-weight: bold;
+    }
+
+    .form-input {
+        padding: 0.4rem;
+        font-size: 1rem;
+    }
+
+    .submit-btn {
+        padding: 0.4rem 0.8rem;
+        background-color: #2a9d8f;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 0.9rem;
+    }
+
+    .submit-btn:hover {
+        background-color: #21867a;
+    }
+
+    select option[disabled] {
+        background-color: #f0f0f0;
+        color: gray;
+    }
+</style>
+{% endblock %}
